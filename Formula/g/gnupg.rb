@@ -1,8 +1,8 @@
 class Gnupg < Formula
   desc "GNU Pretty Good Privacy (PGP) package"
   homepage "https://gnupg.org/"
-  url "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.6.tar.bz2"
-  sha256 "95acfafda7004924a6f5c901677f15ac1bda2754511d973bb4523e8dd840e17a"
+  url "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.5.1.tar.bz2"
+  sha256 "8a34bb318499867962c939e156666ada93ed81f01926590ac68f3ff79178375e"
   license "GPL-3.0-or-later"
 
   livecheck do
@@ -39,12 +39,6 @@ class Gnupg < Formula
     depends_on "gettext"
   end
 
-  # Backport fix for missing unistd.h
-  patch do
-    url "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=patch;h=1d5cfa9b7fd22e1c46eeed5fa9fed2af6f81d34f"
-    sha256 "610d0c50004e900f1310f58255fbf559db641edf22abb86a6f0eb6c270959a5d"
-  end
-
   def install
     libusb = Formula["libusb"]
     ENV.append "CPPFLAGS", "-I#{libusb.opt_include}/libusb-#{libusb.version.major_minor}"
@@ -56,6 +50,8 @@ class Gnupg < Formula
                              "--with-pinentry-pgm=#{Formula["pinentry"].opt_bin}/pinentry",
                              *std_configure_args
       system "make"
+      # `make check` seems to fail unreproducibly if done in parallel.
+      ENV.deparallelize if OS.linux?
       system "make", "check"
       system "make", "install"
     end
