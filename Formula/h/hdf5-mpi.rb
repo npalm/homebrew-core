@@ -1,9 +1,8 @@
 class Hdf5Mpi < Formula
   desc "File format designed to store large amounts of data"
   homepage "https://www.hdfgroup.org/solutions/hdf5/"
-  url "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.4.3/hdf5-1.14.4-3.tar.gz"
-  version "1.14.4.3"
-  sha256 "019ac451d9e1cf89c0482ba2a06f07a46166caf23f60fea5ef3c37724a318e03"
+  url "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.5/hdf5-1.14.5.tar.gz"
+  sha256 "ec2e13c52e60f9a01491bb3158cb3778c985697131fc6a342262d32a26e58e44"
   license "BSD-3-Clause"
   version_scheme 1
 
@@ -30,8 +29,21 @@ class Hdf5Mpi < Formula
 
   conflicts_with "hdf5", because: "hdf5-mpi is a variant of hdf5, one can only use one or the other"
 
+  # Backport fix for zlib linker flag
+  patch do
+    url "https://github.com/HDFGroup/hdf5/commit/e64e1ea881c431a9561b83607d722994af641026.patch?full_index=1"
+    sha256 "2803c3269f3085df38500b9992c4a107f422a5df8a7afa6158607b93c00d9179"
+  end
+
+  # Apply open PR to fix upstream breakage to `libaec` detection and pkg-config flags
+  # PR ref: https://github.com/HDFGroup/hdf5/pull/5010
+  # Issue ref: https://github.com/HDFGroup/hdf5/issues/4949
+  patch do
+    url "https://github.com/HDFGroup/hdf5/commit/8089a2dd5c3da636ab1c263e1ec7ae2e9bc845f7.patch?full_index=1"
+    sha256 "cb94cc2a898b3df26b99a874129b93555b1cc64387af73d121735784eaf63888"
+  end
+
   def install
-    ENV["libaec_DIR"] = Formula["libaec"].opt_prefix.to_s
     args = %w[
       -DHDF5_USE_GNU_DIRS:BOOL=ON
       -DHDF5_INSTALL_CMAKE_DIR=lib/cmake/hdf5
