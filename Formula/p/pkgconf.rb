@@ -2,8 +2,10 @@ class Pkgconf < Formula
   desc "Package compiler and linker metadata toolkit"
   homepage "https://github.com/pkgconf/pkgconf"
   url "https://distfiles.ariadne.space/pkgconf/pkgconf-2.3.0.tar.xz"
+  mirror "http://distfiles.ariadne.space/pkgconf/pkgconf-2.3.0.tar.xz"
   sha256 "3a9080ac51d03615e7c1910a0a2a8df08424892b5f13b0628a204d3fcce0ea8b"
   license "ISC"
+  revision 1
 
   livecheck do
     url "https://distfiles.ariadne.space/pkgconf/"
@@ -30,8 +32,6 @@ class Pkgconf < Formula
     depends_on "libtool" => :build
   end
 
-  conflicts_with "pkg-config", because: "both install `pkg.m4` file"
-
   def install
     if build.head?
       ENV["LIBTOOLIZE"] = "glibtoolize"
@@ -42,27 +42,33 @@ class Pkgconf < Formula
       #{HOMEBREW_PREFIX}/lib/pkgconfig
       #{HOMEBREW_PREFIX}/share/pkgconfig
     ]
-    pc_path << if OS.mac?
-      pc_path << "/usr/local/lib/pkgconfig"
-      pc_path << "/usr/lib/pkgconfig"
-      "#{HOMEBREW_LIBRARY}/Homebrew/os/mac/pkgconfig/#{MacOS.version}"
+    pc_path += if OS.mac?
+      %W[
+        /usr/local/lib/pkgconfig
+        /usr/lib/pkgconfig
+        #{HOMEBREW_LIBRARY}/Homebrew/os/mac/pkgconfig/#{MacOS.version}
+      ]
     else
-      "#{HOMEBREW_LIBRARY}/Homebrew/os/linux/pkgconfig"
+      ["#{HOMEBREW_LIBRARY}/Homebrew/os/linux/pkgconfig"]
     end
 
-    pc_path = pc_path.uniq.join(File::PATH_SEPARATOR)
-
-    configure_args = std_configure_args + %W[
-      --with-pkg-config-dir=#{pc_path}
-    ]
-
-    system "./configure", *configure_args
+    system "./configure", "--disable-silent-rules",
+                          "--with-pkg-config-dir=#{pc_path.uniq.join(File::PATH_SEPARATOR)}",
+                          *std_configure_args
     system "make"
     system "make", "install"
+
+    # Make `pkgconf` a drop-in replacement for `pkg-config` by adding symlink[^1].
+    # Similar to Debian[^2], Fedora, ArchLinux and MacPorts.
+    #
+    # [^1]: https://github.com/pkgconf/pkgconf/#pkg-config-symlink
+    # [^2]: https://salsa.debian.org/debian/pkgconf/-/blob/debian/unstable/debian/pkgconf.links?ref_type=heads
+    bin.install_symlink "pkgconf" => "pkg-config"
+    man1.install_symlink "pkgconf.1" => "pkg-config.1"
   end
 
   test do
-    (testpath/"foo.pc").write <<~EOS
+    (testpath/"foo.pc").write <<~PC
       prefix=/usr
       exec_prefix=${prefix}
       includedir=${prefix}/include
@@ -73,7 +79,7 @@ class Pkgconf < Formula
       Version: 1.0.0
       Cflags: -I${includedir}/foo
       Libs: -L${libdir} -lfoo
-    EOS
+    PC
 
     ENV["PKG_CONFIG_LIBDIR"] = testpath
     system bin/"pkgconf", "--validate", "foo"
