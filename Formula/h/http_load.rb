@@ -12,10 +12,7 @@ class HttpLoad < Formula
     regex(/href=.*?http_load[._-]v?(\d+[a-z]+\d+)\.t/i)
     strategy :page_match do |page, regex|
       # Convert date-based version from 09Mar2016 format to 20160309
-      page.scan(regex).map do |match|
-        date_str = match&.first
-        date_str ? Date.parse(date_str)&.strftime("%Y%m%d") : nil
-      end
+      page.scan(regex).map { |match| Date.parse(match[0])&.strftime("%Y%m%d") }
     end
   end
 
