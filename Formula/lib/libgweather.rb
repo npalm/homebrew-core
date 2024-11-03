@@ -11,7 +11,7 @@ class Libgweather < Formula
   livecheck do
     url :stable
     strategy :gnome do |page, regex|
-      page.scan(regex).select { |match| Version.new(match.first) < 40 }.flatten
+      page.scan(regex).select { |match| Version.new(match[0]) < 40 }.flatten
     end
   end
 
