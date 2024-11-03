@@ -16,7 +16,7 @@ class Phoon < Formula
     url "http://www.acme.com/software/phoon/"
     regex(/href=.*?phoon[._-]v?(\d{1,2}[a-z]+\d{2,4})\.t/i)
     strategy :page_match do |page, regex|
-      page.scan(regex).map { |match| Date.parse(match.first)&.strftime("%Y%m%d") }
+      page.scan(regex).map { |match| Date.parse(match[0])&.strftime("%Y%m%d") }
     end
   end
 
