@@ -13,7 +13,7 @@ class Remake < Formula
     url "https://sourceforge.net/projects/bashdb/files/remake/"
     regex(%r{href=.*?remake/v?(\d+(?:\.\d+)+(?:(?:%2Bdbg)?[._-]\d+(?:\.\d+)+)?)/?["' >]}i)
     strategy :page_match do |page, regex|
-      page.scan(regex).map { |match| match&.first&.sub(/%2Bdbg/i, "") }
+      page.scan(regex).map { |match| match[0]&.sub(/%2Bdbg/i, "") }
     end
   end
 
