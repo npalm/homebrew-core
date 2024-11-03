@@ -10,7 +10,7 @@ class Squirrel < Formula
     url :stable
     regex(%r{url=.*?/squirrel[._-]v?(\d+(?:[_-]\d+)+)[._-]stable\.t}i)
     strategy :sourceforge do |page, regex|
-      page.scan(regex).map { |match| match.first.tr("_", ".") }
+      page.scan(regex).map { |match| match[0].tr("_", ".") }
     end
   end
 
