@@ -11,7 +11,7 @@ class Nauty < Formula
     url :homepage
     regex(/Current\s+?version:\s*?v?(\d+(?:[._]\d+)+(?:r\d+)?)/i)
     strategy :page_match do |page, regex|
-      page.scan(regex).map { |match| match.first.tr("_R", ".r") }
+      page.scan(regex).map { |match| match[0].tr("_R", ".r") }
     end
   end
 
