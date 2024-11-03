@@ -26,7 +26,7 @@ class Boost < Formula
     url "https://www.boost.org/users/download/"
     regex(/href=.*?boost[._-]v?(\d+(?:[._]\d+)+)\.t/i)
     strategy :page_match do |page, regex|
-      page.scan(regex).map { |match| match.first.tr("_", ".") }
+      page.scan(regex).map { |match| match[0].tr("_", ".") }
     end
   end
 
