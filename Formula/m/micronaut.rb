@@ -20,18 +20,20 @@ class Micronaut < Formula
   end
 
   depends_on "gradle" => :build
-  # jdk21 support issue, https://github.com/micronaut-projects/micronaut-core/issues/10046
-  depends_on "openjdk@17"
+  depends_on "openjdk@21"
+
+  # current it defaults to build with java 17, update to use java 21
+  patch :DATA
 
   def install
-    ENV["JAVA_HOME"] = Language::Java.java_home("17")
+    ENV["JAVA_HOME"] = Language::Java.java_home("21")
     system "gradle", "micronaut-cli:assemble", "--exclude-task", "test", "--no-daemon"
 
     libexec.install "starter-cli/build/exploded/lib"
     (libexec/"bin").install "starter-cli/build/exploded/bin/mn"
 
     bash_completion.install "starter-cli/build/exploded/bin/mn_completion" => "mn"
-    (bin/"mn").write_env_script libexec/"bin/mn", Language::Java.overridable_java_home_env("17")
+    (bin/"mn").write_env_script libexec/"bin/mn", Language::Java.overridable_java_home_env("21")
   end
 
   test do
@@ -39,3 +41,27 @@ class Micronaut < Formula
     assert_predicate testpath/"hello-world", :directory?
   end
 end
+
+__END__
+diff --git a/starter-cli/build.gradle b/starter-cli/build.gradle
+index f5e6894..d4146f5 100644
+--- a/starter-cli/build.gradle
++++ b/starter-cli/build.gradle
+@@ -45,7 +45,7 @@ dependencies {
+ }
+ 
+ graalvmNative {
+-    toolchainDetection = false
++    toolchainDetection = true
+ 
+     binaries {
+         main {
+@@ -66,7 +66,7 @@ application {
+ }
+ 
+ rocker {
+-    javaVersion = '17'
++    javaVersion = '21'
+     postProcessing = ['io.micronaut.starter.rocker.WhitespaceProcessor']
+ }
+ 
