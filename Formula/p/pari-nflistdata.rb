@@ -12,7 +12,7 @@ class PariNflistdata < Formula
     url :homepage
     regex(%r{>\s*nflistdata\.t[^<]+?</a>(?:[&(.;\s\w]+?(?:\),?|,))?\s*([a-z]+\s+\d{1,2},?\s+\d{4})\D}i)
     strategy :page_match do |page, regex|
-      page.scan(regex).map { |match| Date.parse(match.first)&.strftime("%Y%m%d") }
+      page.scan(regex).map { |match| Date.parse(match[0])&.strftime("%Y%m%d") }
     end
   end
 
