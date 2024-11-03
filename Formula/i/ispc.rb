@@ -32,13 +32,19 @@ class Ispc < Formula
     depends_on "tbb"
   end
 
-  fails_with gcc: "5"
-
   def llvm
     deps.map(&:to_formula).find { |f| f.name.match? "^llvm" }
   end
 
   def install
+    if OS.linux?
+      inreplace "cmake/CommonStdlibBuiltins.cmake", "foreach (bit 32 64)", "foreach (bit #{Hardware::CPU.bits})"
+      inreplace "cmake/GenerateBuiltins.cmake" do |s|
+        s.gsub! "builtin_to_cpp(32 linux x86)", ""
+        s.gsub! "x86_64-unknown-unknown", "x86_64-unknown-linux-gnu"
+      end
+    end
+
     args = %W[
       -DISPC_INCLUDE_EXAMPLES=OFF
       -DISPC_INCLUDE_TESTS=OFF
