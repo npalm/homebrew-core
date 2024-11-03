@@ -17,7 +17,7 @@ class Wordplay < Formula
     regex(/href=.*?wordplay[._-]?v?(\d+(?:\.\d+)*)\.t/i)
     strategy :page_match do |page, regex|
       # Naively convert a version string like `722` to `7.22`
-      page.scan(regex).map { |match| match.first.sub(/^(\d)(\d+)$/, '\1.\2') }
+      page.scan(regex).map { |match| match[0].sub(/^(\d)(\d+)$/, '\1.\2') }
     end
   end
 
