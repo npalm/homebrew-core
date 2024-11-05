@@ -1,10 +1,11 @@
 class Sqlite < Formula
   desc "Command-line interface for SQLite"
   homepage "https://sqlite.org/index.html"
-  url "https://www.sqlite.org/2024/sqlite-autoconf-3470000.tar.gz"
+  url "https://sqlite.org/src/tarball/trunk/sqlite-trunk.tar.gz"
   version "3.47.0"
-  sha256 "83eb21a6f6a649f506df8bd3aab85a08f7556ceed5dbd8dea743ea003fc3a957"
+  sha256 "21989d5dc882fe43e1bac140f14a5f73feffa58014f4986d70abf7ef3cd81234"
   license "blessing"
+  revision 1
 
   livecheck do
     url :homepage
@@ -51,8 +52,6 @@ class Sqlite < Formula
 
     args = %W[
       --prefix=#{prefix}
-      --disable-dependency-tracking
-      --enable-dynamic-extensions
       --enable-readline
       --disable-editline
       --enable-session
