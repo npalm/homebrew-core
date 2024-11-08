@@ -45,6 +45,7 @@ alsa-lib
 amber
 ammonite-repl
 amp
+ampl-mp
 amqp-cpp
 amtterm
 ancient
