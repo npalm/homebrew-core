@@ -1,10 +1,9 @@
 class Gsmartcontrol < Formula
   desc "Graphical user interface for smartctl"
   homepage "https://gsmartcontrol.shaduri.dev/"
-  url "https://downloads.sourceforge.net/project/gsmartcontrol/1.1.4/gsmartcontrol-1.1.4.tar.bz2"
-  sha256 "fc409f2b8a84cc40bb103d6c82401b9d4c0182d5a3b223c93959c7ad66191847"
+  url "https://downloads.sourceforge.net/project/gsmartcontrol/2.0.0/gsmartcontrol-2.0.0.tar.gz"
+  sha256 "64817d65e26186fa0434cc133ac8ac40c30f21e30dc261dd43d5390d7801d455"
   license any_of: ["GPL-2.0-only", "GPL-3.0-only"]
-  revision 1
 
   bottle do
     sha256 arm64_sequoia:  "1916242e52844623186a4201ab67c2628709cd82848547346551ef12287e44fd"
@@ -17,6 +16,8 @@ class Gsmartcontrol < Formula
     sha256 x86_64_linux:   "13ae669fbe45d24eef652a14415e744470be3a8863b472b41b328b808fd134d5"
   end
 
+  depends_on "cmake" => :build
+  depends_on "llvm" => :build
   depends_on "pkg-config" => :build
   depends_on "atkmm@2.28"
   depends_on "cairo"
@@ -27,7 +28,7 @@ class Gsmartcontrol < Formula
   depends_on "gtkmm3"
   depends_on "libsigc++@2"
   depends_on "pangomm@2.46"
-  depends_on "pcre" # PCRE2 issue: https://github.com/ashaduri/gsmartcontrol/issues/40
+  depends_on "pcre2"
   depends_on "smartmontools"
 
   on_macos do
@@ -39,12 +40,12 @@ class Gsmartcontrol < Formula
   end
 
   def install
-    system "./configure", "--disable-silent-rules", *std_configure_args
-    system "make"
-    system "make", "install"
+    system "cmake", "-S", ".", "-B", "build", *std_cmake_args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
   end
 
   test do
-    system "#{sbin}/gsmartcontrol", "--version"
+    system sbin/"gsmartcontrol", "--version"
   end
 end
