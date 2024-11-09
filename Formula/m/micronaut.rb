@@ -25,6 +25,11 @@ class Micronaut < Formula
   # current it defaults to build with java 17, update to use java 21
   patch :DATA
 
+  patch do
+    url "https://github.com/micronaut-projects/micronaut-starter/commit/0afa194e25b642b0c284992208086208add01d4b.patch?full_index=1"
+    sha256 "3b960de6b4577ca2414fb7e1ea42e33aa01f899548de5053852f828e5a654e39"
+  end
+
   def install
     ENV["JAVA_HOME"] = Language::Java.java_home("21")
     system "gradle", "micronaut-cli:assemble", "--exclude-task", "test", "--no-daemon"
