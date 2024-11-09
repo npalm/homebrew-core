@@ -2285,6 +2285,7 @@ postgrest
 poutine
 powerman
 powerman-dockerize
+ppsspp
 pqiv
 pre-commit
 presenterm
