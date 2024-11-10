@@ -4,6 +4,7 @@ class Kiota < Formula
   url "https://github.com/microsoft/kiota/archive/refs/tags/v1.19.1.tar.gz"
   sha256 "8a6d0d31d71a90edea434df6df4a8bfa96d70e781e64b72e490e295a2accf1d9"
   license "MIT"
+  revision 1
   head "https://github.com/microsoft/kiota.git", branch: "main"
 
   bottle do
