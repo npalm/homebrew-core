@@ -4,6 +4,7 @@ class SbomTool < Formula
   url "https://github.com/microsoft/sbom-tool/archive/refs/tags/v3.0.1.tar.gz"
   sha256 "90085ab1f134f83d43767e46d6952be42a62dbb0f5368e293437620a96458867"
   license "MIT"
+  revision 1
   head "https://github.com/microsoft/sbom-tool.git", branch: "main"
 
   # There can be a notable gap between when a version is tagged and a
