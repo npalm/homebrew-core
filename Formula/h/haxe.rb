@@ -42,7 +42,6 @@ class Haxe < Formula
   depends_on "mbedtls"
   depends_on "neko"
   depends_on "pcre2"
-  depends_on "zlib" # due to `mysql-client`
 
   uses_from_macos "m4" => :build
   uses_from_macos "perl" => :build
