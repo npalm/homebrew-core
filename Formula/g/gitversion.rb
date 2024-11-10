@@ -4,6 +4,7 @@ class Gitversion < Formula
   url "https://github.com/GitTools/GitVersion/archive/refs/tags/6.0.4.tar.gz"
   sha256 "766dc4f7b79a9caa344f2a32ecaabd559346a6a7d74ce1340735ab7a8a2582d0"
   license "MIT"
+  revision 1
 
   bottle do
     sha256 cellar: :any,                 arm64_sequoia: "1dda0d82f91e723ea70609c458d83b9b9bb7b3982e8d52b7aea5e1cf35714b38"
