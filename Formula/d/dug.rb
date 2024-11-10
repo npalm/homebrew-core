@@ -4,6 +4,7 @@ class Dug < Formula
   url "https://github.com/unfrl/dug/archive/refs/tags/0.0.94.tar.gz"
   sha256 "f97952be49d93ed66f1cc7e40bf7004928e6573077839a18f5be371c80e2c16b"
   license "MIT"
+  revision 1
 
   livecheck do
     url :stable
