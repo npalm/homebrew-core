@@ -4,6 +4,7 @@ class Ipopt < Formula
   url "https://github.com/coin-or/Ipopt/archive/refs/tags/releases/3.14.16.tar.gz"
   sha256 "cc8c217991240db7eb14189eee0dff88f20a89bac11958b48625fa512fe8d104"
   license "EPL-2.0"
+  revision 1
   head "https://github.com/coin-or/Ipopt.git", branch: "stable/3.14"
 
   bottle do
@@ -18,7 +19,7 @@ class Ipopt < Formula
 
   depends_on "openjdk" => :build
   depends_on "pkg-config" => [:build, :test]
-  depends_on "ampl-mp"
+  depends_on "ampl-mp@3"
   depends_on "gcc" # for gfortran
   depends_on "openblas"
 
@@ -84,8 +85,8 @@ class Ipopt < Formula
       "--with-blas=-L#{Formula["openblas"].opt_lib} -lopenblas",
       "--with-mumps-cflags=-I#{buildpath}/mumps_include",
       "--with-mumps-lflags=-L#{lib} -ldmumps -lmpiseq -lmumps_common -lopenblas -lpord",
-      "--with-asl-cflags=-I#{Formula["ampl-mp"].opt_include}/asl",
-      "--with-asl-lflags=-L#{Formula["ampl-mp"].opt_lib} -lasl",
+      "--with-asl-cflags=-I#{Formula["ampl-mp@3"].opt_include}/asl",
+      "--with-asl-lflags=-L#{Formula["ampl-mp@3"].opt_lib} -lasl",
     ]
 
     system "./configure", *args
